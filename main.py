@@ -68,6 +68,7 @@ def get_images(link: str) -> list[str]:
     return helpers.get_images(link)
 
 
+
 @mcp.tool()
 def get_text_content(link: str) -> str:
     """
@@ -78,6 +79,59 @@ def get_text_content(link: str) -> str:
         str: The concatenated visible text content of the page.
     """
     return helpers.get_text_content(link)
+
+
+@mcp.tool()
+def get_elements_by_id(link: str, element_id: str) -> list[str]:
+    """
+    Get all elements by HTML id and return their text content.
+    Args:
+        link (str): The URL of the web page to fetch.
+        element_id (str): The id attribute to search for.
+    Returns:
+        list[str]: Text content of all elements with the given id.
+    """
+    return helpers.get_elements_by_id(link, element_id)
+
+
+@mcp.tool()
+def get_elements_by_class_name(link: str, class_name: str) -> list[str]:
+    """
+    Get all elements by HTML class name and return their text content.
+    Args:
+        link (str): The URL of the web page to fetch.
+        class_name (str): The class name to search for.
+    Returns:
+        list[str]: Text content of all elements with the given class name.
+    """
+    return helpers.get_elements_by_class_name(link, class_name)
+
+
+@mcp.tool()
+def get_elements_by_tag_name(link: str, tag_name: str) -> list[str]:
+    """
+    Get all elements by HTML tag name and return their text content.
+    Args:
+        link (str): The URL of the web page to fetch.
+        tag_name (str): The tag name to search for (e.g., 'div', 'span').
+    Returns:
+        list[str]: Text content of all elements with the given tag name.
+    """
+    return helpers.get_elements_by_tag_name(link, tag_name)
+
+
+@mcp.tool()
+def get_elements_by_data_attribute(link: str, data_attr: str, value: str = None) -> list[str]:
+    """
+    Get all elements by data attribute (e.g., data-foo) and return their text content.
+    Args:
+        link (str): The URL of the web page to fetch.
+        data_attr (str): The data attribute name (without 'data-').
+        value (str, optional): The value to match. If not provided, matches any value for the attribute.
+    Returns:
+        list[str]: Text content of all elements with the given data attribute (and value, if specified).
+    """
+    return helpers.get_elements_by_data_attribute(link, data_attr, value)
 
 
 @mcp.resource("greeting://{name}")
