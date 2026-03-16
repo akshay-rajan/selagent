@@ -25,8 +25,10 @@ uv run mcp install main.py
 > Otherwise we have to manually update the configuration. 
 > If installed from the Microsoft Store, the path would be *C:\Users\[username]\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude*
 
-*claude_desktop_config.json*
+**Claude Configuration (Recommended):** 
+
 ```json
+// claude_desktop_config.json
 {
   "mcpServers": {
     "selagent": {
@@ -41,14 +43,37 @@ uv run mcp install main.py
       ]
     }
   },
-  // Existing stuff...
   "preferences": {
-    "menuBarEnabled": false,
-    "coworkScheduledTasksEnabled": false,
-    "ccdScheduledTasksEnabled": false,
-    "coworkWebSearchEnabled": true,
-    "sidebarMode": "chat"
+    // Existing stuff...
   }
+}
+```
+
+**VS Code Configuration:**
+
+1. Enter `Ctrl + Shift + P`.
+2. Search for and select `MCP: Add Server`.
+3. Select `Command` and enter `uv run --with mcp[cli] mcp run C:\path\to\SelAgent\main.py`.
+
+
+```json
+// C:\Users\[username]\AppData\Roaming\Code\User\mcp.json
+{
+	"servers": {
+		"selagent": {
+			"type": "stdio",
+			"command": "uv",
+			"args": [
+				"run",
+				"--with",
+				"mcp[cli]",
+				"mcp",
+				"run",
+				"C:\\path\\to\\SelAgent\\main.py"
+			]
+		}
+	},
+	"inputs": []
 }
 ```
 
