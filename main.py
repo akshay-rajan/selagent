@@ -2,13 +2,39 @@
 
 from mcp.server.fastmcp import FastMCP
 
-from src import navigation
+from src import navigation, session
 
 
 mcp = FastMCP("selagent", json_response=True)
 
 
+# ! BROWSER
+
+
+@mcp.tool()
+def configure_browser(headless: bool = True) -> dict:
+    """
+    Configure the browser to run in headless (default) or visible mode.
+    To be called before any navigation, if the browser configuration needs to be changed.
+    Only affects new sessions.
+    """
+    return session.configure(headless=headless)
+
+
+@mcp.tool()
+def reset_browser() -> dict:
+    """Quit the current browser session and start a fresh one."""
+    return navigation.reset_browser()
+
+
+@mcp.tool()
+def quit_browser() -> dict:
+    """Close the browser entirely and release all resources."""
+    return navigation.quit_browser()
+
+
 # ! NAVIGATION
+
 
 @mcp.tool()
 def open_url(url: str) -> dict:
@@ -50,7 +76,6 @@ def go_forward() -> dict:
 def refresh_page() -> dict:
     """Reload the current page."""
     return navigation.refresh()
-
 
 
 if __name__ == "__main__":
