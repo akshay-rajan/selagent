@@ -2,7 +2,7 @@
 
 from mcp.server.fastmcp import FastMCP
 
-from src import navigation, session
+from src import navigation, session, elements
 
 
 mcp = FastMCP("selagent", json_response=True)
@@ -38,7 +38,10 @@ def quit_browser() -> dict:
 
 @mcp.tool()
 def open_url(url: str) -> dict:
-    """Navigate to the given URL and wait for the page to load. Returns the loaded URL and page title."""
+    """
+    Navigate to the given URL and wait for the page to load.
+    Returns the loaded URL and page title.
+    """
     return navigation.open_url(url)
 
 
@@ -76,6 +79,75 @@ def go_forward() -> dict:
 def refresh_page() -> dict:
     """Reload the current page."""
     return navigation.refresh()
+
+
+# ! ELEMENT FINDING & EXTRACTION
+
+
+@mcp.tool()
+def find_element(strategy: str, value: str, timeout: int = 10) -> dict:
+    """
+    Find a single element by locator strategy (id, name, class, css, xpath, tag, data-*).
+    Returns tag, text, id, name, class, value, visibility, and enabled state.
+    """
+    return elements.find_element(strategy, value, timeout)
+
+
+@mcp.tool()
+def find_elements(strategy: str, value: str) -> dict:
+    """
+    Find all elements matching the locator. 
+    Returns a list of element summaries.
+    """
+    return elements.find_elements(strategy, value)
+
+
+@mcp.tool()
+def get_text_from_element(strategy: str, value: str) -> dict:
+    """Get the visible text of a single element identified by the locator."""
+    return elements.get_text(strategy, value)
+
+
+@mcp.tool()
+def get_attribute_value(strategy: str, value: str, attribute: str) -> dict:
+    """Get a specific HTML attribute value from an element."""
+    return elements.get_attribute(strategy, value, attribute)
+
+
+@mcp.tool()
+def get_all_text_on_page() -> dict:
+    """Return all visible text on the current page."""
+    return elements.get_all_text()
+
+
+@mcp.tool()
+def extract_links() -> dict:
+    """Extract all <a> elements with their href, id, and text."""
+    return elements.extract_links()
+
+
+@mcp.tool()
+def extract_images() -> dict:
+    """Extract all <img> elements with their src, alt, and id."""
+    return elements.extract_images()
+
+
+@mcp.tool()
+def extract_inputs() -> dict:
+    """Extract all <input> elements with type, name, id, placeholder, and value."""
+    return elements.extract_inputs()
+
+
+@mcp.tool()
+def extract_buttons() -> dict:
+    """Extract all <button> elements with type, name, id, and text."""
+    return elements.extract_buttons()
+
+
+@mcp.tool()
+def extract_forms() -> dict:
+    """Extract all <form> elements with action, method, id, and name."""
+    return elements.extract_forms()
 
 
 if __name__ == "__main__":
