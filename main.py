@@ -2,7 +2,7 @@
 
 from mcp.server.fastmcp import FastMCP
 
-from src import navigation, session, elements
+from src import navigation, session, elements, actions
 
 
 mcp = FastMCP("selagent", json_response=True)
@@ -96,7 +96,7 @@ def find_element(strategy: str, value: str, timeout: int = 10) -> dict:
 @mcp.tool()
 def find_elements(strategy: str, value: str) -> dict:
     """
-    Find all elements matching the locator. 
+    Find all elements matching the locator.
     Returns a list of element summaries.
     """
     return elements.find_elements(strategy, value)
@@ -148,6 +148,55 @@ def extract_buttons() -> dict:
 def extract_forms() -> dict:
     """Extract all <form> elements with action, method, id, and name."""
     return elements.extract_forms()
+
+
+# ! ACTIONS
+
+
+@mcp.tool()
+def click_element(strategy: str, value: str, timeout: int = 10) -> dict:
+    """Click on the element identified by the locator strategy and value."""
+    return actions.click_element(strategy, value, timeout)
+
+
+@mcp.tool()
+def type_text(
+    strategy: str, value: str, text: str, clear_first: bool = True, timeout: int = 10
+) -> dict:
+    """Type text into an input or textarea. Clears existing content first by default."""
+    return actions.type_text(strategy, value, text, clear_first, timeout)
+
+
+@mcp.tool()
+def clear_input(strategy: str, value: str, timeout: int = 10) -> dict:
+    """Clear the content of an input or textarea element."""
+    return actions.clear_input(strategy, value, timeout)
+
+
+@mcp.tool()
+def hover_element(strategy: str, value: str, timeout: int = 10) -> dict:
+    """Hover the mouse over an element."""
+    return actions.hover_element(strategy, value, timeout)
+
+
+@mcp.tool()
+def drag_and_drop(
+    src_strategy: str,
+    src_value: str,
+    dst_strategy: str,
+    dst_value: str,
+    timeout: int = 10,
+) -> dict:
+    """Drag the source element and drop it onto the destination element."""
+    return actions.drag_and_drop(
+        src_strategy, src_value, dst_strategy, dst_value, timeout
+    )
+
+
+@mcp.tool()
+def upload_file(strategy: str, value: str, file_path: str, timeout: int = 10) -> dict:
+    """Upload a file by sending its absolute path to a file-type input element."""
+    return actions.upload_file(strategy, value, file_path, timeout)
 
 
 if __name__ == "__main__":
