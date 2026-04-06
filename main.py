@@ -3,7 +3,7 @@
 from mcp.server.fastmcp import FastMCP
 
 from src import navigation, session, elements, actions, forms, waits, assertions
-from src.utils import take_screenshot as _take_screenshot
+from src import utils
 
 mcp = FastMCP("selagent", json_response=True)
 
@@ -357,7 +357,48 @@ def take_screenshot(file_path: str | None = None) -> dict:
     Take a screenshot. Saves to a temp file if no path is given.
     Returns the file path.
     """
-    return _take_screenshot(file_path)
+    return utils.take_screenshot(file_path)
+
+
+# ! Window Navigation
+
+
+@mcp.tool()
+def list_windows() -> dict:
+    """List all open browser windows/tabs and the current active handle."""
+    return utils.list_windows()
+
+
+@mcp.tool()
+def switch_to_window(handle: str) -> dict:
+    """Switch to the browser window/tab with the given handle."""
+    return utils.switch_to_window(handle)
+
+
+@mcp.tool()
+def close_window() -> dict:
+    """Close the current browser window/tab."""
+    return utils.close_window()
+
+
+#  ! iFrames
+
+
+@mcp.tool()
+def switch_to_frame(
+    strategy: str | None = None, value: str | None = None, index: int | None = None
+) -> dict:
+    """
+    Switch into an iframe.
+    Provide a locator (strategy + value) or an integer index.
+    """
+    return utils.switch_to_frame(strategy, value, index)
+
+
+@mcp.tool()
+def switch_to_default_content() -> dict:
+    """Switch back to the top-level page (exit all iframes)."""
+    return utils.switch_to_default_content()
 
 
 if __name__ == "__main__":

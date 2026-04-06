@@ -54,3 +54,66 @@ def take_screenshot(file_path: str | None = None) -> dict:
 
     get_driver().save_screenshot(file_path)
     return ok({"path": file_path}, f"Screenshot saved to {file_path}")
+
+
+@safe
+def list_windows() -> dict:
+    """List all open window/tab handles and the current active handle."""
+    driver = get_driver()
+    return ok(
+        {
+            "current": driver.current_window_handle,
+            "handles": driver.window_handles,
+        }
+    )
+
+
+@safe
+def switch_to_window(handle: str) -> dict:
+    """Switch to the window/tab identified by *handle*."""
+    get_driver().switch_to.window(handle)
+    return ok(message=f"Switched to window {handle}")
+
+
+@safe
+def close_window() -> dict:
+    """Close the current window/tab."""
+    driver = get_driver()
+    driver.close()
+    handles = driver.window_handles
+    if handles:
+        driver.switch_to.window(handles[0])
+    return ok(message="Window closed")
+
+
+@safe
+def switch_to_frame(
+    strategy: str | None = None,
+    value: str | None = None,
+    index: int | None = None,
+) -> dict:
+    """
+    Switch into an iframe.
+    Provide either a locator (strategy + value) or an integer *index*.
+    """
+    driver = get_driver()
+    if index is not None:
+        driver.switch_to.frame(index)
+    elif strategy and value:
+        by, sel = resolve(strategy, value)
+        el = driver.find_element(by, sel)
+        driver.switch_to.frame(el)
+    else:
+        return {
+            "success": False,
+            "message": "Provide (strategy, value) or index",
+            "error": "Missing arguments",
+        }
+    return ok(message="Switched to frame")
+
+
+@safe
+def switch_to_default_content() -> dict:
+    """Switch back to the top-level page (exit all frames)."""
+    get_driver().switch_to.default_content()
+    return ok(message="Switched to default content")
