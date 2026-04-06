@@ -2,7 +2,7 @@
 
 from mcp.server.fastmcp import FastMCP
 
-from src import navigation, session, elements, actions, forms, waits
+from src import navigation, session, elements, actions, forms, waits, assertions
 
 
 mcp = FastMCP("selagent", json_response=True)
@@ -312,6 +312,42 @@ def wait_for_url_contains(fragment: str, timeout: int = 10) -> dict:
 def wait_for_page_load(timeout: int = 15) -> dict:
     """Wait until the page has fully loaded (document.readyState === 'complete')."""
     return waits.wait_for_page_load(timeout)
+
+
+# ! Assertions
+
+
+@mcp.tool()
+def assert_text_present(text: str) -> dict:
+    """
+    Assert that the given text exists on the current page.
+    Returns success or failure.
+    """
+    return assertions.assert_text_present(text)
+
+
+@mcp.tool()
+def assert_text_not_present(text: str) -> dict:
+    """Assert that the given text does NOT exist on the current page."""
+    return assertions.assert_text_not_present(text)
+
+
+@mcp.tool()
+def assert_element_exists(strategy: str, value: str) -> dict:
+    """Assert that at least one element matching the locator exists in the DOM."""
+    return assertions.assert_element_exists(strategy, value)
+
+
+@mcp.tool()
+def assert_element_visible(strategy: str, value: str) -> dict:
+    """Assert that the element matching the locator is visible."""
+    return assertions.assert_element_visible(strategy, value)
+
+
+@mcp.tool()
+def assert_element_enabled(strategy: str, value: str) -> dict:
+    """Assert that the element matching the locator is enabled (not disabled)."""
+    return assertions.assert_element_enabled(strategy, value)
 
 
 if __name__ == "__main__":
