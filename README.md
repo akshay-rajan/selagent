@@ -1,4 +1,4 @@
-# SelAgent
+# <img src="./logo.svg" width="20" height="20"> SelAgent
 
 A Selenium-powered MCP server that exposes browser automation as tool calls. Designed to let AI agents navigate, interact with, and test web pages through natural language.
 
