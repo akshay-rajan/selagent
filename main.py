@@ -486,5 +486,15 @@ def execute_javascript(script: str) -> dict:
     return utils.execute_javascript(script)
 
 
+# ! High-level Page Inspection
+@mcp.tool()
+def inspect_page() -> dict:
+    """
+    Scan the current page and return a structured summary of all interactive elements
+    (inputs, textareas, selects with options, buttons, links, forms) with labels, attributes,
+    and visibility. Use this to understand what can be interacted with on a page."""
+    return utils.inspect_page()
+
+
 if __name__ == "__main__":
     mcp.run(transport="streamable-http")

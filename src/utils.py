@@ -133,3 +133,117 @@ def execute_javascript(script: str, *args: Any) -> dict:
     """
     result = get_driver().execute_script(script, *args)
     return ok(result, "JavaScript executed")
+
+
+@safe
+def inspect_page() -> dict:
+    """
+    Scan the current page and return a structured summary of all actionable /
+    interactive elements, grouped by type.  Designed to give an AI agent enough
+    context to decide which elements to interact with.
+
+    Returned groups:
+        inputs, textareas, selects (with options), buttons, links, forms.
+    """
+    driver = get_driver()
+
+    def _attrs(el, *names):
+        return {n: el.get_attribute(n) or "" for n in names}
+
+    # Inputs
+    inputs = []
+    for el in driver.find_elements("tag name", "input"):
+        info = _attrs(el, "type", "name", "id", "placeholder", "value", "aria-label")
+        info["visible"] = el.is_displayed()
+        info["enabled"] = el.is_enabled()
+        # Try to find an associated label
+        el_id = el.get_attribute("id")
+        if el_id:
+            labels = driver.find_elements("css selector", f'label[for="{el_id}"]')
+            info["label"] = labels[0].text if labels else ""
+        else:
+            info["label"] = ""
+        inputs.append(info)
+
+    # Textareas
+    textareas = []
+    for el in driver.find_elements("tag name", "textarea"):
+        info = _attrs(el, "name", "id", "placeholder", "aria-label")
+        info["visible"] = el.is_displayed()
+        info["value"] = el.get_attribute("value") or ""
+        el_id = el.get_attribute("id")
+        if el_id:
+            labels = driver.find_elements("css selector", f'label[for="{el_id}"]')
+            info["label"] = labels[0].text if labels else ""
+        else:
+            info["label"] = ""
+        textareas.append(info)
+
+    # Selects (with options)
+    selects = []
+    for el in driver.find_elements("tag name", "select"):
+        info = _attrs(el, "name", "id", "aria-label")
+        info["visible"] = el.is_displayed()
+        options = []
+        for opt in el.find_elements("tag name", "option"):
+            options.append(
+                {
+                    "value": opt.get_attribute("value"),
+                    "text": opt.text,
+                    "selected": opt.is_selected(),
+                }
+            )
+        info["options"] = options
+        el_id = el.get_attribute("id")
+        if el_id:
+            labels = driver.find_elements("css selector", f'label[for="{el_id}"]')
+            info["label"] = labels[0].text if labels else ""
+        else:
+            info["label"] = ""
+        selects.append(info)
+
+    # Buttons (both <button> and <input type="submit|button|reset">)
+    buttons = []
+    for el in driver.find_elements("tag name", "button"):
+        info = _attrs(el, "type", "name", "id")
+        info["text"] = el.text
+        info["visible"] = el.is_displayed()
+        info["enabled"] = el.is_enabled()
+        buttons.append(info)
+    for el in driver.find_elements(
+        "css selector",
+        'input[type="submit"], input[type="button"], input[type="reset"]',
+    ):
+        info = _attrs(el, "type", "name", "id", "value")
+        info["text"] = el.get_attribute("value") or ""
+        info["visible"] = el.is_displayed()
+        info["enabled"] = el.is_enabled()
+        buttons.append(info)
+
+    # Links (limit to first 50)
+    links = []
+    for el in driver.find_elements("tag name", "a")[:50]:
+        info = _attrs(el, "href", "id")
+        info["text"] = el.text[:120]
+        info["visible"] = el.is_displayed()
+        links.append(info)
+
+    # Forms
+    forms = []
+    for el in driver.find_elements("tag name", "form"):
+        info = _attrs(el, "action", "method", "id", "name")
+        info["visible"] = el.is_displayed()
+        forms.append(info)
+
+    summary = {
+        "url": driver.current_url,
+        "title": driver.title,
+        "inputs": inputs,
+        "textareas": textareas,
+        "selects": selects,
+        "buttons": buttons,
+        "links_count": len(links),
+        "links": links,
+        "forms": forms,
+    }
+    return ok(summary, "Page inspection complete")
