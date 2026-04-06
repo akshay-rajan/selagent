@@ -3,6 +3,7 @@
 from mcp.server.fastmcp import FastMCP
 
 from src import navigation, session, elements, actions, forms, waits, assertions
+from src import alerts
 from src import utils
 
 mcp = FastMCP("selagent", json_response=True)
@@ -399,6 +400,33 @@ def switch_to_frame(
 def switch_to_default_content() -> dict:
     """Switch back to the top-level page (exit all iframes)."""
     return utils.switch_to_default_content()
+
+
+# ! Alerts
+
+
+@mcp.tool()
+def accept_alert() -> dict:
+    """
+    Accept (click OK on) the current browser alert.
+    Returns the alert text.
+    """
+    return alerts.accept_alert()
+
+
+@mcp.tool()
+def dismiss_alert() -> dict:
+    """
+    Dismiss (click Cancel on) the current browser alert.
+    Returns the alert text.
+    """
+    return alerts.dismiss_alert()
+
+
+@mcp.tool()
+def get_alert_text() -> dict:
+    """Get the text of the current browser alert without accepting or dismissing it."""
+    return alerts.get_alert_text()
 
 
 if __name__ == "__main__":
