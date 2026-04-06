@@ -429,5 +429,32 @@ def get_alert_text() -> dict:
     return alerts.get_alert_text()
 
 
+# ! Scrolling
+
+
+@mcp.tool()
+def scroll_to_element(strategy: str, value: str) -> dict:
+    """Scroll until the element is centered in the viewport."""
+    return scroll.scroll_to_element(strategy, value)
+
+
+@mcp.tool()
+def scroll_to_top() -> dict:
+    """Scroll to the top of the page."""
+    return scroll.scroll_to_top()
+
+
+@mcp.tool()
+def scroll_to_bottom() -> dict:
+    """Scroll to the bottom of the page."""
+    return scroll.scroll_to_bottom()
+
+
+@mcp.tool()
+def scroll_by(x: int = 0, y: int = 300) -> dict:
+    """Scroll by a relative pixel amount."""
+    return scroll.scroll_by(x, y)
+
+
 if __name__ == "__main__":
     mcp.run(transport="streamable-http")
