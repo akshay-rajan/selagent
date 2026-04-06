@@ -2,7 +2,7 @@
 
 from mcp.server.fastmcp import FastMCP
 
-from src import navigation, session, elements, actions
+from src import navigation, session, elements, actions, forms
 
 
 mcp = FastMCP("selagent", json_response=True)
@@ -197,6 +197,86 @@ def drag_and_drop(
 def upload_file(strategy: str, value: str, file_path: str, timeout: int = 10) -> dict:
     """Upload a file by sending its absolute path to a file-type input element."""
     return actions.upload_file(strategy, value, file_path, timeout)
+
+
+# ! FORMS
+
+
+@mcp.tool()
+def select_dropdown(
+    strategy: str,
+    value: str,
+    option_text: str | None = None,
+    option_value: str | None = None,
+    option_index: int | None = None,
+    timeout: int = 10,
+) -> dict:
+    """
+    Select an option from a <select> dropdown.
+    Provide one of option_text, option_value, or option_index.
+    """
+    return forms.select_dropdown(
+        strategy,
+        value,
+        option_text=option_text,
+        option_value=option_value,
+        option_index=option_index,
+        timeout=timeout,
+    )
+
+
+@mcp.tool()
+def check_checkbox(strategy: str, value: str, timeout: int = 10) -> dict:
+    """
+    Ensure a checkbox is checked.
+    No operation if already checked.
+    """
+    return forms.check_checkbox(strategy, value, timeout)
+
+
+@mcp.tool()
+def uncheck_checkbox(strategy: str, value: str, timeout: int = 10) -> dict:
+    """
+    Ensure a checkbox is unchecked.
+    No operation if already unchecked.
+    """
+    return forms.uncheck_checkbox(strategy, value, timeout)
+
+
+@mcp.tool()
+def choose_radio(strategy: str, value: str, timeout: int = 10) -> dict:
+    """Select a radio button."""
+    return forms.choose_radio(strategy, value, timeout)
+
+
+@mcp.tool()
+def submit_form(strategy: str = "tag", value: str = "form", timeout: int = 10) -> dict:
+    """
+    Submit a form element.
+    Defaults to the first <form> on the page.
+    """
+    return forms.submit_form(strategy, value, timeout)
+
+
+@mcp.tool()
+def fill_form_by_label(fields: dict[str, str], timeout: int = 10) -> dict:
+    """
+    Fill form fields using flexible matching.
+    Keys are matched against input name, id, placeholder, or associated <label> text.
+    Values are typed into the matched field.
+    """
+    return forms.fill_form_by_label(fields, timeout)
+
+
+@mcp.tool()
+def submit_and_return_text(
+    strategy: str = "tag", value: str = "form", wait_seconds: int = 5, timeout: int = 10
+) -> dict:
+    """
+    Submit a form, wait for navigation/DOM update, 
+    and return the visible text on the resulting page.
+    """
+    return forms.submit_and_return_text(strategy, value, wait_seconds, timeout)
 
 
 if __name__ == "__main__":
