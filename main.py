@@ -475,7 +475,10 @@ def press_key(key_name: str) -> dict:
 
 @mcp.tool()
 def key_combo(key_names: list[str]) -> dict:
-    """Press a keyboard shortcut. Pass keys as a list, e.g. ['ctrl', 'a'] or ['ctrl', 'shift', 't']."""
+    """
+    Press a keyboard shortcut. 
+    Pass keys as a list, e.g. ['ctrl', 'a'] or ['ctrl', 'shift', 't'].
+    """
     return keyboard.key_combo(*key_names)
 
 
@@ -486,5 +489,17 @@ def execute_javascript(script: str) -> dict:
     return utils.execute_javascript(script)
 
 
+# ! High-level Page Inspection
+@mcp.tool()
+def inspect_page() -> dict:
+    """
+    Scan the current page and return a structured summary of all interactive elements
+    (inputs, textareas, selects with options, buttons, links, forms) with labels, attributes,
+    and visibility. Use this to understand what can be interacted with on a page.
+    """
+    return utils.inspect_page()
+
+
+# ! Entrypoint
 if __name__ == "__main__":
     mcp.run(transport="streamable-http")
