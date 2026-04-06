@@ -117,3 +117,19 @@ def switch_to_default_content() -> dict:
     """Switch back to the top-level page (exit all frames)."""
     get_driver().switch_to.default_content()
     return ok(message="Switched to default content")
+
+
+@safe
+def execute_javascript(script: str, *args: Any) -> dict:
+    """
+    Execute arbitrary JavaScript in the browser and return the result.
+
+    Args:
+        script: JavaScript code to execute.
+        *args: Optional arguments available as ``arguments[0]``, etc. in the script.
+
+    Returns:
+        Dict with the script return value under 'data'.
+    """
+    result = get_driver().execute_script(script, *args)
+    return ok(result, "JavaScript executed")

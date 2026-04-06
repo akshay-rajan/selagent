@@ -3,7 +3,7 @@
 from mcp.server.fastmcp import FastMCP
 
 from src import navigation, session, elements, actions, forms, waits, assertions
-from src import alerts
+from src import alerts, scroll, keyboard
 from src import utils
 
 mcp = FastMCP("selagent", json_response=True)
@@ -454,6 +454,36 @@ def scroll_to_bottom() -> dict:
 def scroll_by(x: int = 0, y: int = 300) -> dict:
     """Scroll by a relative pixel amount."""
     return scroll.scroll_by(x, y)
+
+
+# ! Keyboard
+
+
+@mcp.tool()
+def send_keys_to_element(
+    strategy: str, value: str, keys: str, timeout: int = 10
+) -> dict:
+    """Send a string of keys to the element located by the given locator."""
+    return keyboard.send_keys(strategy, value, keys, timeout)
+
+
+@mcp.tool()
+def press_key(key_name: str) -> dict:
+    """Press a special key globally (enter, tab, escape, f5, etc.)."""
+    return keyboard.press_key(key_name)
+
+
+@mcp.tool()
+def key_combo(key_names: list[str]) -> dict:
+    """Press a keyboard shortcut. Pass keys as a list, e.g. ['ctrl', 'a'] or ['ctrl', 'shift', 't']."""
+    return keyboard.key_combo(*key_names)
+
+
+# ! JavaScript Execution Tool
+@mcp.tool()
+def execute_javascript(script: str) -> dict:
+    """Execute JavaScript code in the browser and return the result."""
+    return utils.execute_javascript(script)
 
 
 if __name__ == "__main__":
