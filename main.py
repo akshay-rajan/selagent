@@ -3,7 +3,7 @@
 from mcp.server.fastmcp import FastMCP
 
 from src import navigation, session, elements, actions, forms, waits, assertions
-
+from src.utils import take_screenshot as _take_screenshot
 
 mcp = FastMCP("selagent", json_response=True)
 
@@ -348,6 +348,16 @@ def assert_element_visible(strategy: str, value: str) -> dict:
 def assert_element_enabled(strategy: str, value: str) -> dict:
     """Assert that the element matching the locator is enabled (not disabled)."""
     return assertions.assert_element_enabled(strategy, value)
+
+
+# ! Take a screenshot
+@mcp.tool()
+def take_screenshot(file_path: str | None = None) -> dict:
+    """
+    Take a screenshot. Saves to a temp file if no path is given.
+    Returns the file path.
+    """
+    return _take_screenshot(file_path)
 
 
 if __name__ == "__main__":
