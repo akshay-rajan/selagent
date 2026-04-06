@@ -2,7 +2,7 @@
 
 from mcp.server.fastmcp import FastMCP
 
-from src import navigation, session, elements, actions, forms
+from src import navigation, session, elements, actions, forms, waits
 
 
 mcp = FastMCP("selagent", json_response=True)
@@ -273,10 +273,45 @@ def submit_and_return_text(
     strategy: str = "tag", value: str = "form", wait_seconds: int = 5, timeout: int = 10
 ) -> dict:
     """
-    Submit a form, wait for navigation/DOM update, 
+    Submit a form, wait for navigation/DOM update,
     and return the visible text on the resulting page.
     """
     return forms.submit_and_return_text(strategy, value, wait_seconds, timeout)
+
+
+# ! EXPLICIT WAITS
+
+
+@mcp.tool()
+def wait_for_element(
+    strategy: str, value: str, timeout: int = 10, visible: bool = False
+) -> dict:
+    """Wait until an element is present (or visible) in the DOM."""
+    return waits.wait_for_element(strategy, value, timeout, visible)
+
+
+@mcp.tool()
+def wait_for_text(text: str, timeout: int = 10) -> dict:
+    """Wait until the given text appears anywhere on the page."""
+    return waits.wait_for_text(text, timeout)
+
+
+@mcp.tool()
+def wait_for_url_change(current_url: str, timeout: int = 10) -> dict:
+    """Wait until the page URL differs from the given URL."""
+    return waits.wait_for_url_change(current_url, timeout)
+
+
+@mcp.tool()
+def wait_for_url_contains(fragment: str, timeout: int = 10) -> dict:
+    """Wait until the page URL contains the given fragment."""
+    return waits.wait_for_url_contains(fragment, timeout)
+
+
+@mcp.tool()
+def wait_for_page_load(timeout: int = 15) -> dict:
+    """Wait until the page has fully loaded (document.readyState === 'complete')."""
+    return waits.wait_for_page_load(timeout)
 
 
 if __name__ == "__main__":
