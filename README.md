@@ -181,7 +181,7 @@ selagent/
 
 - [UV Package Manager](https://docs.astral.sh/uv/#installation)
 
-## Setting Up
+## Setup
 
 ```sh
 # Initialize a new UV (an alternative to 'pip') project
@@ -206,8 +206,8 @@ If installed from the Microsoft Store, the path would be <em>C:\Users\[username]
 
 **Claude Configuration (Recommended):**
 
+*In **claude_desktop_config.json**:*
 ```json
-// claude_desktop_config.json
 {
   "mcpServers": {
     "selagent": {
@@ -239,8 +239,8 @@ If installed from the Microsoft Store, the path would be <em>C:\Users\[username]
 1. `Ctrl + Shift + P` → `MCP: Add Server`
 2. Select `Command` and enter `uv run --with mcp[cli] mcp run C:\path\to\SelAgent\main.py`
 
+*In **C:\Users\[username]\AppData\Roaming\Code\User\mcp.json**:*
 ```json
-// C:\Users\[username]\AppData\Roaming\Code\User\mcp.json
 {
   "servers": {
     "selagent": {
