@@ -126,11 +126,39 @@ A Selenium-powered MCP server that exposes browser automation as tool calls. Des
 | `execute_javascript` | Execute arbitrary JavaScript and return the result |
 | `inspect_page` | Return a structured summary of all interactive elements on the page |
 
+### Cookies
+
+| Tool | Description |
+|------|-------------|
+| `get_cookies` | Return all cookies for the current domain |
+| `get_cookie` | Return a single cookie by name |
+| `add_cookie` | Add a cookie with the given name and value |
+| `delete_cookie` | Delete a specific cookie by name |
+| `clear_cookies` | Delete all cookies for the current domain |
+
+### Local Storage
+
+| Tool | Description |
+|------|-------------|
+| `get_local_storage` | Get a value from localStorage by key |
+| `set_local_storage` | Set a key-value pair in localStorage |
+| `get_all_local_storage` | Return all localStorage key-value pairs |
+| `clear_local_storage` | Clear all localStorage entries |
+
+### Session Storage
+
+| Tool | Description |
+|------|-------------|
+| `get_session_storage` | Get a value from sessionStorage by key |
+| `set_session_storage` | Set a key-value pair in sessionStorage |
+| `get_all_session_storage` | Return all sessionStorage key-value pairs |
+| `clear_session_storage` | Clear all sessionStorage entries |
+
 
 ## Project Structure
 
 ```
-SelAgent/
+selagent/
 ├── main.py              # MCP tool registration (entry point)
 ├── src/
 │   ├── session.py       # Browser session management
@@ -144,7 +172,8 @@ SelAgent/
 │   ├── assertions.py    # Text and element assertions
 │   ├── alerts.py        # Alert accept, dismiss, read text
 │   ├── scroll.py        # Scrolling and viewport control
-│   └── keyboard.py      # Keyboard interactions and shortcuts
+│   ├── keyboard.py      # Keyboard interactions and shortcuts
+│   └── storage.py       # Cookies, localStorage, and sessionStorage
 ```
 
 
@@ -164,9 +193,14 @@ uv init
 uv run mcp install main.py
 ```
 
-> The above command only works if the Claude Desktop config is in *C:\Users\\[username]\AppData\Roaming\Claude*.
-> Otherwise we have to manually update the configuration.
-> If installed from the Microsoft Store, the path would be *C:\Users\\[username]\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude*
+<details>
+<summary>Note</summary>
+
+<p>The above command only works if the Claude Desktop config is in <em>C:\Users\[username]\AppData\Roaming\Claude</em>.<br>
+Otherwise we have to manually update the configuration.<br>
+If installed from the Microsoft Store, the path would be <em>C:\Users\[username]\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude</em></p>
+
+</details>
 
 ---
 
@@ -191,8 +225,14 @@ uv run mcp install main.py
 }
 ```
 
-> The above command only works if the Claude Desktop config is in *C:\Users\\[username]\AppData\Roaming\Claude*.
-> If installed from the Microsoft Store, the path would be *C:\Users\\[username]\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude*
+<details>
+<summary>Note</summary>
+
+<p>The above command only works if the Claude Desktop config is in <em>C:\Users\[username]\AppData\Roaming\Claude</em>.<br>
+If installed from the Microsoft Store, the path would be <em>C:\Users\[username]\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude</em></p>
+
+</details>
+<br>
 
 **VS Code Configuration:**
 
