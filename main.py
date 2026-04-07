@@ -3,7 +3,7 @@
 from mcp.server.fastmcp import FastMCP
 
 from src import navigation, session, elements, actions, forms, waits, assertions
-from src import alerts, scroll, keyboard
+from src import alerts, scroll, keyboard, storage
 from src import utils
 
 mcp = FastMCP("selagent", json_response=True)
@@ -476,7 +476,7 @@ def press_key(key_name: str) -> dict:
 @mcp.tool()
 def key_combo(key_names: list[str]) -> dict:
     """
-    Press a keyboard shortcut. 
+    Press a keyboard shortcut.
     Pass keys as a list, e.g. ['ctrl', 'a'] or ['ctrl', 'shift', 't'].
     """
     return keyboard.key_combo(*key_names)
@@ -498,6 +498,87 @@ def inspect_page() -> dict:
     and visibility. Use this to understand what can be interacted with on a page.
     """
     return utils.inspect_page()
+
+
+# ! Cookies, Session Storage and Local Storage
+
+
+@mcp.tool()
+def get_cookies() -> dict:
+    """Return all cookies for the current domain."""
+    return storage.get_cookies()
+
+
+@mcp.tool()
+def get_cookie(name: str) -> dict:
+    """Return a single cookie by name."""
+    return storage.get_cookie(name)
+
+
+@mcp.tool()
+def add_cookie(name: str, value: str) -> dict:
+    """Add a cookie with the given name and value to the current domain."""
+    return storage.add_cookie(name, value)
+
+
+@mcp.tool()
+def delete_cookie(name: str) -> dict:
+    """Delete a specific cookie by name."""
+    return storage.delete_cookie(name)
+
+
+@mcp.tool()
+def clear_cookies() -> dict:
+    """Delete all cookies for the current domain."""
+    return storage.clear_cookies()
+
+
+@mcp.tool()
+def get_local_storage(key: str) -> dict:
+    """Get a value from localStorage by key."""
+    return storage.get_local_storage(key)
+
+
+@mcp.tool()
+def set_local_storage(key: str, value: str) -> dict:
+    """Set a key-value pair in localStorage."""
+    return storage.set_local_storage(key, value)
+
+
+@mcp.tool()
+def clear_local_storage() -> dict:
+    """Clear all localStorage entries."""
+    return storage.clear_local_storage()
+
+
+@mcp.tool()
+def get_all_local_storage() -> dict:
+    """Return all localStorage key-value pairs as a dict."""
+    return storage.get_all_local_storage()
+
+
+@mcp.tool()
+def get_session_storage(key: str) -> dict:
+    """Get a value from sessionStorage by key."""
+    return storage.get_session_storage(key)
+
+
+@mcp.tool()
+def set_session_storage(key: str, value: str) -> dict:
+    """Set a key-value pair in sessionStorage."""
+    return storage.set_session_storage(key, value)
+
+
+@mcp.tool()
+def clear_session_storage() -> dict:
+    """Clear all sessionStorage entries."""
+    return storage.clear_session_storage()
+
+
+@mcp.tool()
+def get_all_session_storage() -> dict:
+    """Return all sessionStorage key-value pairs as a dict."""
+    return storage.get_all_session_storage()
 
 
 # ! Entrypoint
