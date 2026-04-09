@@ -2,211 +2,43 @@
 
 A Selenium-powered MCP server that exposes browser automation as tool calls. Designed to let AI agents navigate, interact with, and test web pages through natural language.
 
-## Tools
+## Usage
 
-### Browser
-
-| Tool | Description |
-|------|-------------|
-| `configure_browser` | Set headless or visible mode (before first navigation) |
-| `reset_browser` | Quit the current session and start a fresh one |
-| `quit_browser` | Close the browser and release all resources |
-
-### Navigation
-
-| Tool | Description |
-|------|-------------|
-| `open_url` | Navigate to a URL and wait for page load |
-| `get_current_url` | Return the current page URL |
-| `get_page_title` | Return the page title |
-| `get_page_source` | Return the full HTML source |
-| `go_back` / `go_forward` | Browser history navigation |
-| `refresh_page` | Reload the current page |
-
-### Element Finding & Extraction
-
-| Tool | Description |
-|------|-------------|
-| `find_element` | Find a single element by locator (id, name, class, css, xpath, tag, data-*) |
-| `find_elements` | Find all matching elements |
-| `get_text_from_element` | Get visible text of an element |
-| `get_attribute_value` | Get an HTML attribute value |
-| `get_all_text_on_page` | Return all visible text on the page |
-| `extract_links` | Extract all `<a>` elements with href, id, text |
-| `extract_images` | Extract all `<img>` elements with src, alt, id |
-| `extract_inputs` | Extract all `<input>` elements with type, name, id, placeholder, value |
-| `extract_buttons` | Extract all `<button>` elements with type, name, id, text |
-| `extract_forms` | Extract all `<form>` elements with action, method, id, name |
-
-### Actions
-
-| Tool | Description |
-|------|-------------|
-| `click_element` | Click an element |
-| `type_text` | Type text into an input/textarea (clears first by default) |
-| `clear_input` | Clear the content of an input/textarea |
-| `hover_element` | Hover the mouse over an element |
-| `drag_and_drop` | Drag source element onto destination element |
-| `upload_file` | Upload a file to a file-type input |
-
-### Forms
-
-| Tool | Description |
-|------|-------------|
-| `select_dropdown` | Select an option from a `<select>` dropdown |
-| `check_checkbox` / `uncheck_checkbox` | Toggle checkbox state |
-| `choose_radio` | Select a radio button |
-| `fill_form_by_label` | Fill form fields by matching name, id, placeholder, or label text |
-| `submit_form` | Submit a form element |
-| `submit_and_return_text` | Submit a form and return the resulting page text |
-
-### Explicit Waits
-
-| Tool | Description |
-|------|-------------|
-| `wait_for_element` | Wait until an element is present (or visible) |
-| `wait_for_text` | Wait until text appears on the page |
-| `wait_for_url_change` | Wait until the URL changes |
-| `wait_for_url_contains` | Wait until the URL contains a fragment |
-| `wait_for_page_load` | Wait until `document.readyState` is complete |
-
-### Assertions
-
-| Tool | Description |
-|------|-------------|
-| `assert_text_present` / `assert_text_not_present` | Verify text presence on page |
-| `assert_element_exists` | Verify an element exists in the DOM |
-| `assert_element_visible` | Verify an element is visible |
-| `assert_element_enabled` | Verify an element is enabled |
-
-### Screenshots
-
-| Tool | Description |
-|------|-------------|
-| `take_screenshot` | Capture a full-page screenshot (saves to temp if no path given) |
-
-### Windows & Frames
-
-| Tool | Description |
-|------|-------------|
-| `list_windows` | List all open window/tab handles |
-| `switch_to_window` | Switch to a window/tab by handle |
-| `close_window` | Close the current window/tab |
-| `switch_to_frame` | Switch into an iframe by locator or index |
-| `switch_to_default_content` | Exit all iframes back to the top-level page |
-
-### Alerts
-
-| Tool | Description |
-|------|-------------|
-| `accept_alert` | Accept (OK) the current alert |
-| `dismiss_alert` | Dismiss (Cancel) the current alert |
-| `get_alert_text` | Read alert text without acting on it |
-
-### Scrolling
-
-| Tool | Description |
-|------|-------------|
-| `scroll_to_element` | Scroll until an element is centered in viewport |
-| `scroll_to_top` / `scroll_to_bottom` | Scroll to page extremes |
-| `scroll_by` | Scroll by a relative pixel amount |
-
-### Keyboard
-
-| Tool | Description |
-|------|-------------|
-| `send_keys_to_element` | Send keys to a specific element |
-| `press_key` | Press a special key globally (enter, tab, escape, etc.) |
-| `key_combo` | Press a keyboard shortcut (e.g. ctrl+a, ctrl+shift+t) |
-
-### JavaScript & Inspection
-
-| Tool | Description |
-|------|-------------|
-| `execute_javascript` | Execute arbitrary JavaScript and return the result |
-| `inspect_page` | Return a structured summary of all interactive elements on the page |
-
-### Cookies
-
-| Tool | Description |
-|------|-------------|
-| `get_cookies` | Return all cookies for the current domain |
-| `get_cookie` | Return a single cookie by name |
-| `add_cookie` | Add a cookie with the given name and value |
-| `delete_cookie` | Delete a specific cookie by name |
-| `clear_cookies` | Delete all cookies for the current domain |
-
-### Local Storage
-
-| Tool | Description |
-|------|-------------|
-| `get_local_storage` | Get a value from localStorage by key |
-| `set_local_storage` | Set a key-value pair in localStorage |
-| `get_all_local_storage` | Return all localStorage key-value pairs |
-| `clear_local_storage` | Clear all localStorage entries |
-
-### Session Storage
-
-| Tool | Description |
-|------|-------------|
-| `get_session_storage` | Get a value from sessionStorage by key |
-| `set_session_storage` | Set a key-value pair in sessionStorage |
-| `get_all_session_storage` | Return all sessionStorage key-value pairs |
-| `clear_session_storage` | Clear all sessionStorage entries |
-
-
-## Project Structure
-
-```
-selagent/
-├── main.py              # MCP tool registration (entry point)
-├── src/
-│   ├── session.py       # Browser session management
-│   ├── locators.py      # Locator strategy resolution
-│   ├── utils.py         # Response builders, error handling, screenshots, windows, frames, JS, inspection
-│   ├── navigation.py    # URL navigation, history, refresh
-│   ├── elements.py      # Element finding and data extraction
-│   ├── actions.py       # Click, type, hover, drag-and-drop, file upload
-│   ├── forms.py         # Dropdowns, checkboxes, radios, form fill and submit
-│   ├── waits.py         # Explicit waits for elements, text, URL, page load
-│   ├── assertions.py    # Text and element assertions
-│   ├── alerts.py        # Alert accept, dismiss, read text
-│   ├── scroll.py        # Scrolling and viewport control
-│   ├── keyboard.py      # Keyboard interactions and shortcuts
-│   └── storage.py       # Cookies, localStorage, and sessionStorage
-```
-
-
-## Prerequisites
-
+**Prerequisites:**
 - [UV Package Manager](https://docs.astral.sh/uv/#installation)
 
-## Setup
+### 1. Initialize the Project
+
+SelAgent uses `uv` (a fast alternative to `pip`). Run the following in your project directory:
 
 ```sh
-# Initialize a new UV (an alternative to 'pip') project
 uv init
 ```
 
+### 2. Configure the MCP Server
+
+You can install SelAgent automatically or configure it manually for your preferred client.
+
+**Option A: Automatic Installation (Claude Desktop)**
+
 ```sh
-# Automatically update the Claude Desktop configuration
 uv run mcp install main.py
 ```
 
 <details>
-<summary>Note</summary>
+<summary>Note on Automatic Installation</summary>
 
 <p>The above command only works if the Claude Desktop config is in <em>C:\Users\[username]\AppData\Roaming\Claude</em>.<br>
-Otherwise we have to manually update the configuration.<br>
+Otherwise you must manually update the configuration.<br>
 If installed from the Microsoft Store, the path would be <em>C:\Users\[username]\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude</em></p>
 
 </details>
+<br>
 
----
+**Option B: Manual Configuration for Claude Desktop**
 
-**Claude Configuration (Recommended):**
+Add the following to your `claude_desktop_config.json`:
 
-*In **claude_desktop_config.json**:*
 ```json
 {
   "mcpServers": {
@@ -226,20 +58,20 @@ If installed from the Microsoft Store, the path would be <em>C:\Users\[username]
 ```
 
 <details>
-<summary>Note</summary>
+<summary>Config File Locations</summary>
 
-<p>The above command only works if the Claude Desktop config is in <em>C:\Users\[username]\AppData\Roaming\Claude</em>.<br>
-If installed from the Microsoft Store, the path would be <em>C:\Users\[username]\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude</em></p>
+<p>Standard install: <em>C:\Users\[username]\AppData\Roaming\Claude</em>.<br>
+Microsoft Store install: <em>C:\Users\[username]\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude</em></p>
 
 </details>
 <br>
 
-**VS Code Configuration:**
+**Option C: Manual Configuration for VS Code**
 
-1. `Ctrl + Shift + P` → `MCP: Add Server`
-2. Select `Command` and enter `uv run --with mcp[cli] mcp run C:\path\to\SelAgent\main.py`
+1. Press `Ctrl + Shift + P` and select `MCP: Add Server`
+2. Select `Command` and enter: `uv run --with mcp[cli] mcp run C:\path\to\SelAgent\main.py`
+3. Alternatively, update `C:\Users\[username]\AppData\Roaming\Code\User\mcp.json` directly:
 
-*In **C:\Users\[username]\AppData\Roaming\Code\User\mcp.json**:*
 ```json
 {
   "servers": {
@@ -259,6 +91,126 @@ If installed from the Microsoft Store, the path would be <em>C:\Users\[username]
 }
 ```
 
----
+## Tools
+
+#### Browser
+
+- Set headless or visible mode (before first navigation)
+- Quit the current session and start a fresh one
+- Close the browser and release all resources
+
+#### Navigation
+
+- Navigate to a URL and wait for page load
+- Return the current page URL
+- Return the page title
+- Return the full HTML source
+- Browser history navigation
+- Reload the current page
+
+#### Element Finding & Extraction
+
+- Find a single element by locator (id, name, class, css, xpath, tag, data-*)
+- Find all matching elements
+- Get visible text of an element
+- Get an HTML attribute value
+- Return all visible text on the page
+- Extract all `<a>` elements with href, id, text
+- Extract all `<img>` elements with src, alt, id
+- Extract all `<input>` elements with type, name, id, placeholder, value
+- Extract all `<button>` elements with type, name, id, text
+- Extract all `<form>` elements with action, method, id, name
+
+#### Actions
+
+- Click an element
+- Type text into an input/textarea (clears first by default)
+- Clear the content of an input/textarea
+- Hover the mouse over an element
+- Drag source element onto destination element
+- Upload a file to a file-type input
+
+#### Forms
+
+- Select an option from a `<select>` dropdown
+- Toggle checkbox state
+- Select a radio button
+- Fill form fields by matching name, id, placeholder, or label text
+- Submit a form element
+- Submit a form and return the resulting page text
+
+#### Explicit Waits
+
+- Wait until an element is present (or visible)
+- Wait until text appears on the page
+- Wait until the URL changes
+- Wait until the URL contains a fragment
+- Wait until `document.readyState` is complete
+
+#### Assertions
+
+- Verify text presence on page
+- Verify an element exists in the DOM
+- Verify an element is visible
+- Verify an element is enabled
+
+#### Screenshots
+
+- Capture a full-page screenshot (saves to temp if no path given)
+
+#### Windows & Frames
+
+- List all open window/tab handles
+- Switch to a window/tab by handle
+- Close the current window/tab
+- Switch into an iframe by locator or index
+- Exit all iframes back to the top-level page
+
+#### Alerts
+
+- Accept (OK) the current alert
+- Dismiss (Cancel) the current alert
+- Read alert text without acting on it
+
+#### Scrolling
+
+- Scroll until an element is centered in viewport
+- Scroll to page extremes
+- Scroll by a relative pixel amount
+
+#### Keyboard
+
+- Send keys to a specific element
+- Press a special key globally (enter, tab, escape, etc.)
+- Press a keyboard shortcut (e.g. ctrl+a, ctrl+shift+t)
+
+#### JavaScript & Inspection
+
+- Execute arbitrary JavaScript and return the result
+- Return a structured summary of all interactive elements on the page
+
+#### Cookies
+
+- Return all cookies for the current domain
+- Return a single cookie by name
+- Add a cookie with the given name and value
+- Delete a specific cookie by name
+- Delete all cookies for the current domain
+
+#### Local Storage
+
+- Get a value from localStorage by key
+- Set a key-value pair in localStorage
+- Return all localStorage key-value pairs
+- Clear all localStorage entries
+
+#### Session Storage
+
+- Get a value from sessionStorage by key
+- Set a key-value pair in sessionStorage
+- Return all sessionStorage key-value pairs
+- Clear all sessionStorage entries
+
+## Additional Resources
 
 - [Python MCP SDK](https://github.com/modelcontextprotocol/python-sdk)
